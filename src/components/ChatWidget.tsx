@@ -239,7 +239,13 @@ export function ChatWidget() {
             <ConversationContent>
               {messages.length === 0 ? (
                 <ConversationEmptyState
-                  icon={<Sparkles size={28} className="text-gold" />}
+                  icon={
+                    <img
+                      src="/favicon.png"
+                      alt="Anaya Spa lotus"
+                      className="h-7 w-7 object-contain opacity-80"
+                    />
+                  }
                   title="Welcome to Anaya Spa"
                   description="Ask about our massages, facials, packages, or booking hours. Our concierge is here to help."
                 />
