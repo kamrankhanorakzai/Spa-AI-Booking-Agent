@@ -178,7 +178,7 @@ export function ChatWidget() {
     () =>
       new TextStreamChatTransport({
         api: N8N_WEBHOOK_URL,
-        fetch: mockN8nFetch,
+        fetch: n8nFetch,
       }),
     [],
   );
