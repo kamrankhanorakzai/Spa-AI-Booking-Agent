@@ -148,34 +148,25 @@ function createN8nFetch(sessionId: string) {
 
 export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
-  const [initialMessages] = useState<UIMessage[]>(loadMessages);
+  const [sessionId] = useState<string>(() => createSessionId());
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const transport = useMemo(
     () =>
       new TextStreamChatTransport({
         api: N8N_WEBHOOK_URL,
-        fetch: n8nFetch,
+        fetch: createN8nFetch(sessionId),
       }),
-    [],
+    [sessionId],
   );
 
   const { messages, sendMessage, status, setMessages } = useChat({
     id: CHAT_ID,
-    messages: initialMessages,
     transport,
-    onFinish: ({ messages: finalMessages }) => {
-      saveMessages(finalMessages);
-    },
     onError: (error) => {
       console.error("Chat error:", error);
     },
   });
-
-  // Persist messages on every change (user messages, streaming updates, etc.).
-  useEffect(() => {
-    saveMessages(messages);
-  }, [messages]);
 
   // Focus textarea whenever the panel opens and after a message is sent.
   useEffect(() => {
@@ -196,7 +187,6 @@ export function ChatWidget() {
 
   const handleClear = useCallback(() => {
     setMessages([]);
-    saveMessages([]);
   }, [setMessages]);
 
   const isLoading = status === "submitted" || status === "streaming";
